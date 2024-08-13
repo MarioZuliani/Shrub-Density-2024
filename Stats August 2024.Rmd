@@ -14,6 +14,8 @@ library(vegan)
 library(dplyr)
 library(car)
 library(knitr)
+library(ggplot2)
+library(patchwork)
 ```
 
 ### Plot Level 2022
@@ -108,3 +110,154 @@ b3.1 <- anova(y3.1, test = "Chisq")
 b3.1
 ```
 
+### Figures
+```{r}
+### Density Figure
+abund_dens_2022 <- ggplot(plot_2022, aes(shrub_density, animals)) +
+  geom_point()+
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = TRUE, color = "black") +
+  facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Shrub Density per 20m Radius", y = "Observations") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+abund_dens_2022
+
+rich_dens_2022 <- ggplot(plot_2022, aes(shrub_density, richness)) + geom_point() +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Shrub Density per 20m Radius", y = "Richness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) +
+theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+rich_dens_2022
+
+even_dens_2022 <- ggplot(plot_2022, aes(shrub_density, Evenness)) + geom_point() +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Shrub Density per 20m Radius", y = "Evenness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+
+theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+even_dens_2022
+
+abund_dens_2023 <- ggplot(plot_2023, aes(shrub_density, animals)) +
+  geom_point()+
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = TRUE, color = "black") +
+  facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Shrub Density per 20m Radius", y = "Observations") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+abund_dens_2023
+
+rich_dens_2023 <- ggplot(plot_2023, aes(shrub_density, richness)) + geom_point() +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Shrub Density per 20m Radius", y = "Richness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) +
+theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+rich_dens_2023
+
+even_dens_2023 <- ggplot(plot_2023, aes(shrub_density, Evenness)) + geom_point() +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Shrub Density per 20m Radius", y = "Evenness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+
+theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+even_dens_2023
+
+
+combined_dens_plots <- (
+  abund_dens_2022 + abund_dens_2023 + rich_dens_2022 + rich_dens_2023 + even_dens_2022 + even_dens_2023
+) + plot_layout(ncol = 2)
+combined_dens_plots
+```
+
+```{r}
+### Temperature
+abund_temp_2022 <- ggplot(plot_2022, aes(mean_temp, animals)) +
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = TRUE, color = "black") + facet_wrap(~year)+ geom_point() +
+scale_color_brewer(palette = "Set1") +  labs(x = "Temperature (°C)", y = "Visitations") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+abund_temp_2022
+
+
+rich_temp_2022 <- ggplot(plot_2022, aes(mean_temp, richness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+ geom_point() +
+scale_color_brewer(palette = "Set1") +  labs(x = "Temperature (°C)", y = "Richness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+rich_temp_2022
+
+
+even_temp_2022 <- ggplot(plot_2022, aes(mean_temp, Evenness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+ geom_point() +
+scale_color_brewer(palette = "Set1") +  labs(x = "Temperature (°C)", y = "Evenness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+even_temp_2022
+
+
+abund_temp_2023 <- ggplot(plot_2023, aes(mean_temp, animals)) +
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = TRUE, color = "black") + facet_wrap(~year)+ geom_point() +
+scale_color_brewer(palette = "Set1") +  labs(x = "Temperature (°C)", y = "Observations") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+abund_temp_2023 
+
+
+rich_temp_2023 <- ggplot(plot_2023, aes(mean_temp, richness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+ geom_point() +
+scale_color_brewer(palette = "Set1") +  labs(x = "Temperature (°C)", y = "Richness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+rich_temp_2023 
+
+
+even_temp_2023 <- ggplot(plot_2023, aes(mean_temp, Evenness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + facet_wrap(~year)+ geom_point() +
+scale_color_brewer(palette = "Set1") +  labs(x = "Temperature (°C)", y = "Evenness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+even_temp_2023
+
+combined_temp_plot <- (abund_temp_2022 + abund_temp_2023  + rich_temp_2022 + rich_temp_2023  + even_temp_2022 + even_temp_2023) + plot_layout(ncol=2)
+combined_temp_plot
+```
+
+```{r}
+### Site Level Aridity
+
+tidy_site_2022$year <- 2022
+
+abund_arid_2022 <- ggplot(tidy_site_2022, aes(aridity, total_animals)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + geom_point()+ facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Aridity", y = "Observations") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+abund_arid_2022
+
+rich_arid_2022 <- ggplot(tidy_site_2022, aes(aridity, Species_Richness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + geom_point()+ facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Aridity", y = "Richness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+rich_arid_2022
+
+
+even_arid_2022 <- ggplot(tidy_site_2022, aes(aridity, Evenness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + geom_point()+ facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Aridity", y = "Evenness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+even_arid_2022
+
+tidy_site_2023$year <- 2023
+
+abund_arid_2023 <- ggplot(tidy_site_2023, aes(aridity, total_animals)) +
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = TRUE, color = "black") + geom_point()+ facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Aridity", y = "Observations") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+abund_arid_2023
+
+rich_arid_2023 <- ggplot(tidy_site_2023, aes(aridity, Species_Richness)) +
+geom_smooth(method = "lm", se = TRUE, color = "black") + geom_point()+ facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Aridity", y = "Richness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+rich_arid_2023
+
+
+even_arid_2023 <- ggplot(tidy_site_2023, aes(aridity, Evenness)) +
+geom_smooth(method = "lm", formula = y ~ poly(x, 2), se = TRUE, color = "black") + geom_point()+ facet_wrap(~year)+
+scale_color_brewer(palette = "Set1") +  labs(x = "Aridity", y = "Evenness") + theme_classic() + theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10))+ theme(text = element_text(size = 12), panel.border = element_rect(color = "black", fill = NA, size = 1.5), axis.text = element_text(size = 10)) + theme(aspect.ratio = 0.7) + theme(legend.position = "none") + theme(legend.text = element_text(size = 8))
+
+even_arid_2023
+
+
+combined_plots_arid <- (abund_arid_2022 + abund_arid_2023 + rich_arid_2022 + rich_arid_2023 + even_arid_2022 +even_arid_2023) + plot_layout(ncol=2)
+combined_plots_arid
+
+```
